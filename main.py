@@ -51,7 +51,7 @@ while running:
             mouse_pos = event.pos
             if button1_rect.collidepoint(mouse_pos):
                 # Launch mortalcombat.py
-                script_path = os.path.join(os.getcwd(), "../brawler_tut-main/main.py")
+                script_path = os.path.join(os.getcwd(), "brawler_tut-main/main.py")
                 if os.path.exists(script_path):
                     subprocess.Popen([sys.executable, script_path])
                     running = False  # Close main menu
