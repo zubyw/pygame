@@ -51,17 +51,19 @@ while running:
             mouse_pos = event.pos
             if button1_rect.collidepoint(mouse_pos):
                 # Launch mortalcombat.py
-                script_path = os.path.join(os.getcwd(), "brawler_tut-main/main.py")
+                script_dir = os.path.join(os.getcwd(), "brawler_tut-main")
+                script_path = os.path.join(script_dir, "main.py")
                 if os.path.exists(script_path):
-                    subprocess.Popen([sys.executable, script_path])
+                    subprocess.Popen([sys.executable, script_path], cwd=script_dir)
                     running = False  # Close main menu
                 else:
                     print("mortalcombat.py not found.")
             elif button2_rect.collidepoint(mouse_pos):
                 # Launch gokomo.py
-                script_path = os.path.join(os.getcwd(), "game.py")
+                script_dir = os.getcwd()
+                script_path = os.path.join(script_dir, "game.py")
                 if os.path.exists(script_path):
-                    subprocess.Popen([sys.executable, script_path])
+                    subprocess.Popen([sys.executable, script_path], cwd=script_dir)
                     running = False  # Close main menu
                 else:
                     print("gokomo.py not found.")
