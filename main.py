@@ -57,7 +57,7 @@ while running:
                     subprocess.Popen([sys.executable, script_path], cwd=script_dir)
                     running = False  # Close main menu
                 else:
-                    print("mortalcombat.py not found.")
+                    print("mortalcombat not found.")
             elif button2_rect.collidepoint(mouse_pos):
                 # Launch gokomo.py
                 script_dir = os.getcwd()
@@ -66,7 +66,7 @@ while running:
                     subprocess.Popen([sys.executable, script_path], cwd=script_dir)
                     running = False  # Close main menu
                 else:
-                    print("gokomo.py not found.")
+                    print("gokomo not found.")
 
     # Get mouse position for hover effect
     mouse_pos = pygame.mouse.get_pos()
