@@ -28,14 +28,17 @@ button_height = 80
 button_x = (SCREEN_WIDTH - button_width) // 2
 button_y1 = 200
 button_y2 = button_y1 + button_height + 50  # 50 pixels below the first button
+button_y3 = button_y2 + button_height + 50  # 50 pixels below the second button
 
 # Define button rectangles
 button1_rect = pygame.Rect(button_x, button_y1, button_width, button_height)
 button2_rect = pygame.Rect(button_x, button_y2, button_width, button_height)
+button3_rect = pygame.Rect(button_x, button_y3, button_width, button_height)  # New button for the new game
 
 # Render button text
 button1_text = FONT.render("Mortal Combat", True, WHITE)
 button2_text = FONT.render("Gokomo", True, WHITE)
+button3_text = FONT.render("Climbing Game", True, WHITE)  # Updated button text for Ziyu
 
 # Render title text
 title_text = TITLE_FONT.render("Select Your Game", True, WHITE)
@@ -51,7 +54,7 @@ while running:
             mouse_pos = event.pos
             if button1_rect.collidepoint(mouse_pos):
                 # Launch mortalcombat.py
-                script_dir = os.path.join(os.getcwd(), "brawler_tut-main")
+                script_dir = os.path.join(os.getcwd(), "mortale_gevecht")
                 script_path = os.path.join(script_dir, "main.py")
                 if os.path.exists(script_path):
                     subprocess.Popen([sys.executable, script_path], cwd=script_dir)
@@ -60,13 +63,22 @@ while running:
                     print("mortalcombat not found.")
             elif button2_rect.collidepoint(mouse_pos):
                 # Launch gokomo.py
-                script_dir = os.getcwd()
-                script_path = os.path.join(script_dir, "game.py")
+                script_dir = os.path.join(os.getcwd(), "ziyu")  # Updated directory for Gokomo
+                script_path = os.path.join(script_dir, "game.py")  # Path to Gokomo game
                 if os.path.exists(script_path):
                     subprocess.Popen([sys.executable, script_path], cwd=script_dir)
                     running = False  # Close main menu
                 else:
                     print("gokomo not found.")
+            elif button3_rect.collidepoint(mouse_pos):  # New condition for Ziyu
+                # Launch climbing.py
+                script_dir = os.path.join(os.getcwd(), "zuby")  # Updated directory for Ziyu
+                script_path = os.path.join(script_dir, "climbing.py")  # Path to Ziyu game
+                if os.path.exists(script_path):
+                    subprocess.Popen([sys.executable, script_path], cwd=script_dir)
+                    running = False  # Close main menu
+                else:
+                    print("ziyu not found.")
 
     # Get mouse position for hover effect
     mouse_pos = pygame.mouse.get_pos()
@@ -94,6 +106,15 @@ while running:
     pygame.draw.rect(SCREEN, WHITE, button2_rect, 2)  # Button border
     text_rect2 = button2_text.get_rect(center=button2_rect.center)
     SCREEN.blit(button2_text, text_rect2)
+
+    # Button 3 (Ziyu)
+    if button3_rect.collidepoint(mouse_pos):
+        pygame.draw.rect(SCREEN, LIGHT_GREY, button3_rect)
+    else:
+        pygame.draw.rect(SCREEN, GREY, button3_rect)
+    pygame.draw.rect(SCREEN, WHITE, button3_rect, 2)  # Button border
+    text_rect3 = button3_text.get_rect(center=button3_rect.center)
+    SCREEN.blit(button3_text, text_rect3)
 
     # Update the display
     pygame.display.flip()
