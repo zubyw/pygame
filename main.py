@@ -6,43 +6,28 @@ import os
 # Initialize Pygame
 pygame.init()
 
-# Screen dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+# Screen dimensions and setup
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Game Selection Menu")
 
 # Colors
-BLACK = (0, 0, 0)
-GREY = (100, 100, 100)
-LIGHT_GREY = (170, 170, 170)
-WHITE = (255, 255, 255)
+BLACK, GREY, LIGHT_GREY, WHITE = (0, 0, 0), (100, 100, 100), (170, 170, 170), (255, 255, 255)
 
 # Fonts
 FONT = pygame.font.SysFont(None, 50)
 TITLE_FONT = pygame.font.SysFont(None, 70)
 
 # Button settings
-button_width = 300
-button_height = 80
-button_x = (SCREEN_WIDTH - button_width) // 2
-button_y1 = 200
-button_y2 = button_y1 + button_height + 50  # 50 pixels below the first button
-button_y3 = button_y2 + button_height + 50  # 50 pixels below the second button
+BUTTON_WIDTH, BUTTON_HEIGHT = 300, 80
+BUTTON_Y_POSITIONS = [200, 280, 360]  # Y positions for buttons
 
-# Define button rectangles
-button1_rect = pygame.Rect(button_x, button_y1, button_width, button_height)
-button2_rect = pygame.Rect(button_x, button_y2, button_width, button_height)
-button3_rect = pygame.Rect(button_x, button_y3, button_width, button_height)  # New button for the new game
-
-# Render button text
-button1_text = FONT.render("Mortal Combat", True, WHITE)
-button2_text = FONT.render("Gokomo", True, WHITE)
-button3_text = FONT.render("Climbing Game", True, WHITE)  # Updated button text for Ziyu
-
-# Render title text
-title_text = TITLE_FONT.render("Select Your Game", True, WHITE)
-title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 100))
+# Button rectangles and text
+buttons = [
+    {"text": "Mortal Combat", "script": "mortale_gevecht/main.py"},
+    {"text": "Gokomo", "script": "ziyu/game.py"},
+    {"text": "Climbing Game", "script": "zuby/climbing.py"},
+]
 
 # Main loop
 running = True
@@ -52,69 +37,30 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = event.pos
-            if button1_rect.collidepoint(mouse_pos):
-                # Launch mortalcombat.py
-                script_dir = os.path.join(os.getcwd(), "mortale_gevecht")
-                script_path = os.path.join(script_dir, "main.py")
-                if os.path.exists(script_path):
-                    subprocess.Popen([sys.executable, script_path], cwd=script_dir)
-                    running = False  # Close main menu
-                else:
-                    print("mortalcombat not found.")
-            elif button2_rect.collidepoint(mouse_pos):
-                # Launch gokomo.py
-                script_dir = os.path.join(os.getcwd(), "ziyu")  # Updated directory for Gokomo
-                script_path = os.path.join(script_dir, "game.py")  # Path to Gokomo game
-                if os.path.exists(script_path):
-                    subprocess.Popen([sys.executable, script_path], cwd=script_dir)
-                    running = False  # Close main menu
-                else:
-                    print("gokomo not found.")
-            elif button3_rect.collidepoint(mouse_pos):  # New condition for Ziyu
-                # Launch climbing.py
-                script_dir = os.path.join(os.getcwd(), "zuby")  # Updated directory for Ziyu
-                script_path = os.path.join(script_dir, "climbing.py")  # Path to Ziyu game
-                if os.path.exists(script_path):
-                    subprocess.Popen([sys.executable, script_path], cwd=script_dir)
-                    running = False  # Close main menu
-                else:
-                    print("ziyu not found.")
-
-    # Get mouse position for hover effect
-    mouse_pos = pygame.mouse.get_pos()
+            for index, button in enumerate(buttons):
+                button_rect = pygame.Rect((SCREEN_WIDTH - BUTTON_WIDTH) // 2, BUTTON_Y_POSITIONS[index], BUTTON_WIDTH, BUTTON_HEIGHT)
+                if button_rect.collidepoint(mouse_pos):
+                    script_path = os.path.join(os.getcwd(), button["script"])
+                    if os.path.exists(script_path):
+                        subprocess.Popen([sys.executable, script_path], cwd=os.path.dirname(script_path))
+                        running = False  # Close main menu
 
     # Fill the screen with black
     SCREEN.fill(BLACK)
 
     # Draw title
+    title_text = TITLE_FONT.render("Select Your Game", True, WHITE)
+    title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 100))
     SCREEN.blit(title_text, title_rect)
 
-    # Button 1 (Mortal Combat)
-    if button1_rect.collidepoint(mouse_pos):
-        pygame.draw.rect(SCREEN, LIGHT_GREY, button1_rect)
-    else:
-        pygame.draw.rect(SCREEN, GREY, button1_rect)
-    pygame.draw.rect(SCREEN, WHITE, button1_rect, 2)  # Button border
-    text_rect1 = button1_text.get_rect(center=button1_rect.center)
-    SCREEN.blit(button1_text, text_rect1)
-
-    # Button 2 (Gokomo)
-    if button2_rect.collidepoint(mouse_pos):
-        pygame.draw.rect(SCREEN, LIGHT_GREY, button2_rect)
-    else:
-        pygame.draw.rect(SCREEN, GREY, button2_rect)
-    pygame.draw.rect(SCREEN, WHITE, button2_rect, 2)  # Button border
-    text_rect2 = button2_text.get_rect(center=button2_rect.center)
-    SCREEN.blit(button2_text, text_rect2)
-
-    # Button 3 (Ziyu)
-    if button3_rect.collidepoint(mouse_pos):
-        pygame.draw.rect(SCREEN, LIGHT_GREY, button3_rect)
-    else:
-        pygame.draw.rect(SCREEN, GREY, button3_rect)
-    pygame.draw.rect(SCREEN, WHITE, button3_rect, 2)  # Button border
-    text_rect3 = button3_text.get_rect(center=button3_rect.center)
-    SCREEN.blit(button3_text, text_rect3)
+    # Draw buttons
+    for index, button in enumerate(buttons):
+        button_rect = pygame.Rect((SCREEN_WIDTH - BUTTON_WIDTH) // 2, BUTTON_Y_POSITIONS[index], BUTTON_WIDTH, BUTTON_HEIGHT)
+        color = LIGHT_GREY if button_rect.collidepoint(pygame.mouse.get_pos()) else GREY
+        pygame.draw.rect(SCREEN, color, button_rect)
+        text_surface = FONT.render(button["text"], True, WHITE)
+        text_rect = text_surface.get_rect(center=button_rect.center)
+        SCREEN.blit(text_surface, text_rect)
 
     # Update the display
     pygame.display.flip()
