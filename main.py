@@ -24,7 +24,7 @@ BUTTON_Y_POSITIONS = [200, 280, 360]  # Y positions for buttons
 
 # Button rectangles and text
 buttons = [
-    {"text": "Mortal Combat", "script": "mortale_gevecht/main.py"},
+    {"text": "Mortal Combat", "script": "rami/main.py"},
     {"text": "Gokomo", "script": "ziyu/game.py"},
     {"text": "Climbing Game", "script": "zuby/climbing.py"},
 ]
